@@ -27,6 +27,7 @@ const main = async () => {
   const server = createServer(app);
   /** Inicializamos socket.io */
   const io = new Server(server, {
+    path: '/wp/socket.io',
     cors: {
       origin: "http://localhost:4200",
       methods: ["GET", "POST"],
@@ -80,14 +81,14 @@ const main = async () => {
   });
 
   /** @description Endpoint para mandar la info del número de teléfono y el mensaje a enviar. */
-  app.post("/send-message", async (req: Request, res: Response) => {
+  app.post("/wp/send-message", async (req: Request, res: Response) => {
     const { phone, message } = req.body;
     await provider.sendMessage(phone, message, {});
     res.send("OK");
   });
 
   /** @description Endpoint para recibir el estado del dispositivo conectado */
-  app.get("/connection", (req: Request, res: Response) => {
+  app.get("/wp/connection", (req: Request, res: Response) => {
     if (isConnected) res.send({connected: true, mediaUrl: ''})
     else {
         const filePath = path.join(__dirname, "../bot.qr.png");
